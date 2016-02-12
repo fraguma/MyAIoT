@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -26,6 +28,27 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        */
+
+        Thread h = new Thread(new Runnable(){
+            public void run(){
+
+                imprimir("Hilo de Log iniciado.\n");
+
+                while(true){
+
+                    imprimir("Holii ");
+
+                    try{
+                        Thread.sleep(200);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        h.start();
     }
 
     @Override
@@ -48,5 +71,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    synchronized void imprimir(final String cad){
+        runOnUiThread(new Runnable(){
+            public void run(){
+                TextView ll = (TextView) findViewById(R.id.TextViewEstado);
+                ll.append(cad);
+                ScrollView lll = (ScrollView) findViewById(R.id.ScrollViewEstado);
+                lll.fullScroll(View.FOCUS_DOWN);
+            }
+        });
     }
 }
